@@ -1,0 +1,837 @@
+name: Autograding Tests
+'on':
+- push
+- repository_dispatch
+permissions:
+  checks: write
+  actions: read
+  contents: read
+jobs:
+  run-autograding-tests:
+    runs-on: ubuntu-latest
+    if: github.actor != 'github-classroom[bot]'
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    - name: build jars
+      id: build-jars
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: build jars
+        setup-command: ''
+        command: gradle jar
+        timeout: 10
+        max-score: 0
+    - name: copying sending with acks calculator
+      id: copying-sending-with-acks-calculator
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: copying sending with acks calculator
+        setup-command: ''
+        command: cp SendingWithAcksJava/build/libs/SendingWithAcksJava-5784.jar .
+        timeout: 1
+        max-score: 0
+    - name: sending with calculator tests
+      id: sending-with-calculator-tests
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: sending with calculator tests
+        setup-command: chmod 700 sending-with-acks-tests.bat
+        command: "./sending-with-acks-tests.bat"
+        timeout: 10
+        max-score: 0
+    - name: Sending with ACKs Test 1
+      id: sending-with-acks-test-1
+      uses: classroom-resources/autograding-io-grader@v1
+      with:
+        test-name: Sending with ACKs Test 1
+        setup-command: ''
+        command: java -jar ./SendingWithAcksJava-5784.jar -filesize=40B -packetsize=10B
+          -acksize=10B -bandwidth=100mbps -rtt=52ms
+        input: ''
+        expected-output: 0.208\d*\s*s
+        comparison-method: regex
+        timeout: 1
+        max-score: 2
+    - name: Sending with ACKs Test 2
+      id: sending-with-acks-test-2
+      uses: classroom-resources/autograding-io-grader@v1
+      with:
+        test-name: Sending with ACKs Test 2
+        setup-command: ''
+        command: java -jar ./SendingWithAcksJava-5784.jar -filesize=10KB -packetsize=10B
+          -acksize=10B -bandwidth=100mbps -rtt=51ms
+        input: ''
+        expected-output: 52.225\d*\s*s
+        comparison-method: regex
+        timeout: 1
+        max-score: 2
+    - name: Sending with ACKs Test 3
+      id: sending-with-acks-test-3
+      uses: classroom-resources/autograding-io-grader@v1
+      with:
+        test-name: Sending with ACKs Test 3
+        setup-command: ''
+        command: java -jar ./SendingWithAcksJava-5784.jar -filesize=23MB -packetsize=10B
+          -acksize=10B -bandwidth=100mbps -rtt=53ms
+        input: ''
+        expected-output: 127825.283\d*\s*s
+        comparison-method: regex
+        timeout: 1
+        max-score: 2
+    - name: Sending with ACKs Test 4
+      id: sending-with-acks-test-4
+      uses: classroom-resources/autograding-io-grader@v1
+      with:
+        test-name: Sending with ACKs Test 4
+        setup-command: ''
+        command: java -jar ./SendingWithAcksJava-5784.jar -filesize=45.5GB -packetsize=10B
+          -acksize=10B -bandwidth=100mbps -rtt=154ms
+        input: ''
+        expected-output: 752378713.040\d*\s*s
+        comparison-method: regex
+        timeout: 1
+        max-score: 2
+    - name: Sending with ACKs Test 5
+      id: sending-with-acks-test-5
+      uses: classroom-resources/autograding-io-grader@v1
+      with:
+        test-name: Sending with ACKs Test 5
+        setup-command: ''
+        command: java -jar ./SendingWithAcksJava-5784.jar -filesize=40B -packetsize=10B
+          -acksize=10B -bandwidth=100mbps -rtt=45ms
+        input: ''
+        expected-output: 0.180\d*\s*s
+        comparison-method: regex
+        timeout: 1
+        max-score: 2
+    - name: Sending with ACKs Test 6
+      id: sending-with-acks-test-6
+      uses: classroom-resources/autograding-io-grader@v1
+      with:
+        test-name: Sending with ACKs Test 6
+        setup-command: ''
+        command: java -jar ./SendingWithAcksJava-5784.jar -filesize=10KB -packetsize=1KB
+          -acksize=10B -bandwidth=100mbps -rtt=32ms
+        input: ''
+        expected-output: 0.320\d*\s*s
+        comparison-method: regex
+        timeout: 1
+        max-score: 2
+    - name: Sending with ACKs Test 7
+      id: sending-with-acks-test-7
+      uses: classroom-resources/autograding-io-grader@v1
+      with:
+        test-name: Sending with ACKs Test 7
+        setup-command: ''
+        command: java -jar ./SendingWithAcksJava-5784.jar -filesize=23MB -packetsize=52B
+          -acksize=10B -bandwidth=100mbps -rtt=200ms
+        input: ''
+        expected-output: 92761.100\d*\s*s
+        comparison-method: regex
+        timeout: 1
+        max-score: 2
+    - name: Sending with ACKs Test 8
+      id: sending-with-acks-test-8
+      uses: classroom-resources/autograding-io-grader@v1
+      with:
+        test-name: Sending with ACKs Test 8
+        setup-command: ''
+        command: java -jar ./SendingWithAcksJava-5784.jar -filesize=45.5GB -packetsize=0.1KB
+          -acksize=10B -bandwidth=100mbps -rtt=16ms
+        input: ''
+        expected-output: 763\d\d\d\d.\d*\s*s
+        comparison-method: regex
+        timeout: 1
+        max-score: 2
+    - name: Sending with ACKs Test 9
+      id: sending-with-acks-test-9
+      uses: classroom-resources/autograding-io-grader@v1
+      with:
+        test-name: Sending with ACKs Test 9
+        setup-command: ''
+        command: java -jar ./SendingWithAcksJava-5784.jar -filesize=40B -packetsize=10B
+          -acksize=10B -bandwidth=100mbps -rtt=11ms
+        input: ''
+        expected-output: 0.044\d*\s*s
+        comparison-method: regex
+        timeout: 1
+        max-score: 2
+    - name: Sending with ACKs Test 10
+      id: sending-with-acks-test-10
+      uses: classroom-resources/autograding-io-grader@v1
+      with:
+        test-name: Sending with ACKs Test 10
+        setup-command: ''
+        command: java -jar ./SendingWithAcksJava-5784.jar -filesize=10KB -packetsize=1KB
+          -acksize=10B -bandwidth=100Gbps -rtt=89ms
+        input: ''
+        expected-output: 0.890\d*\s*s
+        comparison-method: regex
+        timeout: 1
+        max-score: 1
+    - name: Sending with ACKs Test 11
+      id: sending-with-acks-test-11
+      uses: classroom-resources/autograding-io-grader@v1
+      with:
+        test-name: Sending with ACKs Test 11
+        setup-command: ''
+        command: java -jar ./SendingWithAcksJava-5784.jar -filesize=23MB -packetsize=150B
+          -acksize=10B -bandwidth=10.5Gbps -rtt=189ms
+        input: ''
+        expected-output: 30387.817\d*\s*s
+        comparison-method: regex
+        timeout: 1
+        max-score: 1
+    - name: Sending with ACKs Test 12
+      id: sending-with-acks-test-12
+      uses: classroom-resources/autograding-io-grader@v1
+      with:
+        test-name: Sending with ACKs Test 12
+        setup-command: ''
+        command: java -jar ./SendingWithAcksJava-5784.jar -filesize=45.5GB -packetsize=0.1KB
+          -acksize=10B -bandwidth=0.5Gbps -rtt=101ms
+        input: ''
+        expected-output: 481\d\d\d\d\d.\d*\s*s
+        comparison-method: regex
+        timeout: 1
+        max-score: 1
+    - name: Sending with ACKs Test 13
+      id: sending-with-acks-test-13
+      uses: classroom-resources/autograding-io-grader@v1
+      with:
+        test-name: Sending with ACKs Test 13
+        setup-command: ''
+        command: java -jar ./SendingWithAcksJava-5784.jar -filesize=40KB -packetsize=1KB
+          -acksize=50B -bandwidth=10mbps -rtt=7ms
+        input: ''
+        expected-output: 0.314\d*\s*s
+        comparison-method: regex
+        timeout: 1
+        max-score: 1
+    - name: Sending with ACKs Test 14
+      id: sending-with-acks-test-14
+      uses: classroom-resources/autograding-io-grader@v1
+      with:
+        test-name: Sending with ACKs Test 14
+        setup-command: ''
+        command: java -jar ./SendingWithAcksJava-5784.jar -filesize=10MB -packetsize=1000B
+          -acksize=100B -bandwidth=100gbps -rtt=150ms
+        input: ''
+        expected-output: 1572.900\d*\s*s
+        comparison-method: regex
+        timeout: 1
+        max-score: 1
+    - name: Sending with ACKs Missing Parameter Test 1
+      id: sending-with-acks-missing-parameter-test-1
+      uses: classroom-resources/autograding-io-grader@v1
+      with:
+        test-name: Sending with ACKs Missing Parameter Test 1
+        setup-command: ''
+        command: java -jar ./SendingWithAcksJava-5784.jar -filesize=10MB -bandwidth=100gbps
+          -rtt=50ms
+        input: ''
+        expected-output: Usage:\s+-filesize=f\s+-packetsize=p\s+-acksize=a\s+-bandwidth=b\s+-rtt=r\s+f
+          can be of units B, KB, MB, GB\s+p can be of units B, KB\s+a can be of unit
+          B\s+b can be of units mbps, gbps\s+r can be of unit ms
+        comparison-method: regex
+        timeout: 1
+        max-score: 1
+    - name: Sending with ACKs Missing Parameter Test 2
+      id: sending-with-acks-missing-parameter-test-2
+      uses: classroom-resources/autograding-io-grader@v1
+      with:
+        test-name: Sending with ACKs Missing Parameter Test 2
+        setup-command: ''
+        command: java -jar ./SendingWithAcksJava-5784.jar -filesize=40b -bandwidth=100gbp
+          -rtt=40s
+        input: ''
+        expected-output: Usage:\s+-filesize=f\s+-packetsize=p\s+-acksize=a\s+-bandwidth=b\s+-rtt=r\s+f
+          can be of units B, KB, MB, GB\s+p can be of units B, KB\s+a can be of unit
+          B\s+b can be of units mbps, gbps\s+r can be of unit ms
+        comparison-method: regex
+        timeout: 1
+        max-score: 1
+    - name: Copying Stop Wait Client and Server
+      id: copying-stop-wait-client-and-server
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: Copying Stop Wait Client and Server
+        setup-command: cp UdpStopWaitClient/build/libs/UdpStopWaitClient-5784.jar
+          .
+        command: cp UdpStopWaitServer/build/libs/UdpStopWaitServer-5784.jar .
+        timeout: 1
+        max-score: 0
+    - name: Prepare output directory
+      id: prepare-output-directory
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: Prepare output directory
+        setup-command: mkdir outfiles
+        command: chmod 700 stop-wait-tests.bat
+        timeout: 1
+        max-score: 0
+    - name: Run stop wait tests
+      id: run-stop-wait-tests
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: Run stop wait tests
+        setup-command: ''
+        command: "./stop-wait-tests.bat"
+        timeout: 10
+        max-score: 0
+    - name: SWTest1 Server output
+      id: swtest1-server-output
+      uses: classroom-resources/autograding-io-grader@v1
+      with:
+        test-name: SWTest1 Server output
+        setup-command: ''
+        command: head -10 test1-server-output.txt
+        input: ''
+        expected-output: |-
+          Listening...
+          Received and acked: 1
+          Listening...
+          Received and acked: 2
+          Listening...
+          Received and acked: 3
+          Listening...
+          Received and acked: 4
+          Listening...
+          Received and acked: 5
+        comparison-method: contains
+        timeout: 1
+        max-score: 0
+    - name: SWTest1 Server output conclusion
+      id: swtest1-server-output-conclusion
+      uses: classroom-resources/autograding-io-grader@v1
+      with:
+        test-name: SWTest1 Server output conclusion
+        setup-command: ''
+        command: tail -9 test1-server-output.txt
+        input: ''
+        expected-output: Listening...\s+Received and acked:\s+1989\s+Listening...\s+Received
+          and acked:\s+1990\s+Listening...\s+Received and acked:\s+1991\s+Listening...\s+Received
+          and acked:\s+1992\s+File outfiles/Test1-file1.pdf completed.\s+Received\s+1992
+          packets.
+        comparison-method: regex
+        timeout: 1
+        max-score: 1
+    - name: SWTest1 Client output
+      id: swtest1-client-output
+      uses: classroom-resources/autograding-io-grader@v1
+      with:
+        test-name: SWTest1 Client output
+        setup-command: ''
+        command: head -10 test1-client-output.txt && tail -8 test1-client-output.txt
+        input: ''
+        expected-output: Sent packet 1\s+Received ACK on\s+1\s+Sent packet\s+2\s+Received
+          ACK on\s+2\s+Sent packet\s+3\s+Received ACK on\s+3\s+Sent packet\s+4\s+Received
+          ACK on\s+4\s+Sent packet\s+5\s+Received ACK on\s+5[a-zA-z0-9\s]*Sent packet\s+1989\s+Received
+          ACK on\s+1989\s+Sent packet\s+1990\s+Received ACK on\s+1990\s+Sent packet\s+1991\s+Received
+          ACK on\s+1991\s+Sent final packet for file1.pdf.\s+Received ACK on\s+1992
+        comparison-method: regex
+        timeout: 1
+        max-score: 1
+    - name: SWTest2 Server output
+      id: swtest2-server-output
+      uses: classroom-resources/autograding-io-grader@v1
+      with:
+        test-name: SWTest2 Server output
+        setup-command: ''
+        command: head -10 test2-server-output.txt && tail -5 test2-server-output.txt
+        input: ''
+        expected-output: Listening...\s+Received and acked:\s+1\s+Listening...\s+Received
+          and acked:\s+2\s+Listening...\s+Received and acked:\s+3\s+Listening...\s+Received
+          and acked:\s+4\s+Listening...\s+Received and acked:\s+5\s+[:\.a-zA-Z0-9\s]*Listening...\s+Received
+          and acked:\s+1493\s+Listening...\s+Received and acked:\s+1494\s+File outfiles\/Test2-file1.pdf
+          completed.\s+Received\s+1494 packets.
+        comparison-method: regex
+        timeout: 1
+        max-score: 1
+    - name: SWTest2 Client output
+      id: swtest2-client-output
+      uses: classroom-resources/autograding-io-grader@v1
+      with:
+        test-name: SWTest2 Client output
+        setup-command: ''
+        command: head -10 test2-client-output.txt
+        input: ''
+        expected-output: |-
+          Sent packet 1
+          Received ACK on 1
+          Sent packet 2
+          Received ACK on 2
+          Sent packet 3
+          Received ACK on 3
+          Sent packet 4
+          Received ACK on 4
+          Sent packet 5
+          Received ACK on 5
+        comparison-method: contains
+        timeout: 1
+        max-score: 0
+    - name: SWTest2 Client output conclusion
+      id: swtest2-client-output-conclusion
+      uses: classroom-resources/autograding-io-grader@v1
+      with:
+        test-name: SWTest2 Client output conclusion
+        setup-command: ''
+        command: tail -4 test2-client-output.txt
+        input: ''
+        expected-output: |-
+          Sent packet 1493
+          Received ACK on 1493
+          Sent final packet for file1.pdf.
+          Received ACK on 1494
+        comparison-method: contains
+        timeout: 1
+        max-score: 1
+    - name: SWTest3 Server output
+      id: swtest3-server-output
+      uses: classroom-resources/autograding-io-grader@v1
+      with:
+        test-name: SWTest3 Server output
+        setup-command: ''
+        command: head -10 test3-server-output.txt
+        input: ''
+        expected-output: |-
+          Listening...
+          Received and acked: 1
+          Listening...
+          Received and acked: 2
+          Listening...
+          Received and acked: 3
+          Listening...
+          Received and acked: 4
+          Listening...
+          Received and acked: 5
+        comparison-method: contains
+        timeout: 1
+        max-score: 0
+    - name: SWTest3 Server output conclusion
+      id: swtest3-server-output-conclusion
+      uses: classroom-resources/autograding-io-grader@v1
+      with:
+        test-name: SWTest3 Server output conclusion
+        setup-command: ''
+        command: tail -5 test3-server-output.txt
+        input: ''
+        expected-output: Listening...\s+Received and acked:\s+1195\s+Listening...\s+Received
+          and acked:\s+1196\s+File outfiles/Test3-file1.pdf completed.\s+Received\s+1196
+          packets.
+        comparison-method: regex
+        timeout: 1
+        max-score: 1
+    - name: SWTest3 Client output
+      id: swtest3-client-output
+      uses: classroom-resources/autograding-io-grader@v1
+      with:
+        test-name: SWTest3 Client output
+        setup-command: ''
+        command: head -n 10 test3-client-output.txt && tail -n 10 test3-client-output.txt
+        input: ''
+        expected-output: Sent packet\s+1\s+Received ACK on 1\s+Sent packet\s+2\s+Received
+          ACK on 2\s+Sent packet\s+3\s+Received ACK on 3\s+Sent packet\s+4\s+Received
+          ACK on 4\s+Sent packet\s+5\s+Received ACK on 5[a-zA-Z0-9\s]+Sent packet\s+1195\s+Received
+          ACK on 1195\s+Sent final packet\s+for file1.pdf.\s+Received ACK on 1196
+        comparison-method: regex
+        timeout: 1
+        max-score: 1
+    - name: SWTest4 Server Output
+      id: swtest4-server-output
+      uses: classroom-resources/autograding-io-grader@v1
+      with:
+        test-name: SWTest4 Server Output
+        setup-command: ''
+        command: head -6 test4-server-output.txt && tail -5 test4-server-output.txt
+        input: ''
+        expected-output: Listening...\s+Received and acked:\s+1\s+Listening...\s+Received
+          and acked:\s+2\s+Listening...\s+Received and acked:\s+3[\.:a-zA-Z0-9\s]+Listening...\s+Received
+          and acked:\s+996\s+Listening...\s+Received and acked:\s+997\s+File outfiles\/Test4-file1.pdf
+          completed.\s+Received 997 packets.
+        comparison-method: regex
+        timeout: 1
+        max-score: 1
+    - name: SWTest4 Client output
+      id: swtest4-client-output
+      uses: classroom-resources/autograding-io-grader@v1
+      with:
+        test-name: SWTest4 Client output
+        setup-command: ''
+        command: head -n 5 test4-client-output.txt && tail -n 5 test4-client-output.txt
+        input: ''
+        expected-output: Sent packet\s+1\s+Received ACK on\s+1\s+Sent packet\s+2\s+Received
+          ACK on\s+2[a-zA-Z0-9\s]+Sent packet\s+996\s+Received ACK on\s+996\s+Sent
+          final packet\s+for file1.pdf.\s+Received ACK on\s+997
+        comparison-method: regex
+        timeout: 1
+        max-score: 1
+    - name: SWTest5 Server Output
+      id: swtest5-server-output
+      uses: classroom-resources/autograding-io-grader@v1
+      with:
+        test-name: SWTest5 Server Output
+        setup-command: ''
+        command: head -6 test5-server-output.txt && tail -5 test5-server-output.txt
+        input: ''
+        expected-output: Listening...\s+Received and acked:\s+1\s+Listening...\s+Received
+          and acked:\s+2\s+Listening...\s+Received and acked:\s+3[\.:a-zA-Z0-9\s]+Listening...\s+Received
+          and acked:\s+299\s+Listening...\s+Received and acked:\s+300\s+File outfiles/Test5-file1.pdf
+          completed.\s+Received 300 packets.
+        comparison-method: regex
+        timeout: 1
+        max-score: 1
+    - name: SWTest6 Server output
+      id: swtest6-server-output
+      uses: classroom-resources/autograding-io-grader@v1
+      with:
+        test-name: SWTest6 Server output
+        setup-command: ''
+        command: head -6 test6-server-output.txt && tail -5 test6-server-output.txt
+        input: ''
+        expected-output: Listening...\s+Received and acked:\s+1\s+Listening...\s+Received
+          and acked:\s+2\s+Listening...\s+Received and acked:\s+3[\.:a-zA-Z0-9\s]+Listening...\s+Received
+          and acked:\s+200\s+Listening...\s+Received and acked:\s+201\s+File outfiles/Test6-file1.pdf
+          completed.\s+Received 201 packets.
+        comparison-method: regex
+        timeout: 1
+        max-score: 1
+    - name: SWTest7 Server output
+      id: swtest7-server-output
+      uses: classroom-resources/autograding-io-grader@v1
+      with:
+        test-name: SWTest7 Server output
+        setup-command: ''
+        command: head -6 test7-server-output.txt && tail -5 test7-server-output.txt
+        input: ''
+        expected-output: Listening...\s+Received and acked:\s+1\s+Listening...\s+Received
+          and acked:\s+2\s+Listening...\s+Received and acked:\s+3[\.:a-zA-Z0-9\s]+Listening...\s+Received
+          and acked:\s+6899\s+Listening...\s+Received and acked:\s+6900\s+File outfiles/Test7-file2.txt
+          completed.\s+Received 6900 packets.
+        comparison-method: regex
+        timeout: 1
+        max-score: 1
+    - name: SWTest8 Server output
+      id: swtest8-server-output
+      uses: classroom-resources/autograding-io-grader@v1
+      with:
+        test-name: SWTest8 Server output
+        setup-command: ''
+        command: head -n 8 test8-server-output.txt && tail -n 5 test8-server-output.txt
+        input: ''
+        expected-output: Listening...\s+Received and acked:\s+1\s+Listening...\s+Received
+          and acked:\s+2\s+Listening...\s+Received and acked:\s+3[\.:a-zA-Z0-9\s]+Listening...\s+Received
+          and acked:\s+5217\s+Listening...\s+Received and acked:\s+5218\s+File outfiles/Test8-file2.txt
+          completed.\s+Received 5218 packets.
+        comparison-method: regex
+        timeout: 1
+        max-score: 1
+    - name: SWTest9 Server output
+      id: swtest9-server-output
+      uses: classroom-resources/autograding-io-grader@v1
+      with:
+        test-name: SWTest9 Server output
+        setup-command: ''
+        command: head -n 8 test9-server-output.txt && tail -n 5 test9-server-output.txt
+        input: ''
+        expected-output: Listening...\s+Received and acked:\s+1\s+Listening...\s+Received
+          and acked:\s+2\s+Listening...\s+Received and acked:\s+3[\.:a-zA-Z0-9\s]+Listening...\s+Received
+          and acked:\s+2979\s+Listening...\s+Received and acked:\s+2980\s+File outfiles/Test9-file2.txt
+          completed.\s+Received 2980 packets.
+        comparison-method: regex
+        timeout: 1
+        max-score: 1
+    - name: SWTest10 Server output
+      id: swtest10-server-output
+      uses: classroom-resources/autograding-io-grader@v1
+      with:
+        test-name: SWTest10 Server output
+        setup-command: ''
+        command: head -n 8 test10-server-output.txt && tail -n 5 test10-server-output.txt
+        input: ''
+        expected-output: Listening...\s+Received and acked:\s+1\s+Listening...\s+Received
+          and acked:\s+2\s+Listening...\s+Received and acked:\s+3[\.:a-zA-Z0-9\s]+Listening...\s+Received
+          and acked:\s+586\s+Listening...\s+Received and acked:\s+587\s+File outfiles/Test10-file2.txt
+          completed.\s+Received 587 packets.
+        comparison-method: regex
+        timeout: 1
+        max-score: 1
+    - name: SWTest11 Server output
+      id: swtest11-server-output
+      uses: classroom-resources/autograding-io-grader@v1
+      with:
+        test-name: SWTest11 Server output
+        setup-command: ''
+        command: head -n 8 test11-server-output.txt && tail -n 5 test11-server-output.txt
+        input: ''
+        expected-output: Listening...\s+Received and acked:\s+1\s+Listening...\s+Received
+          and acked:\s+2\s+Listening...\s+Received and acked:\s+3[\.:a-zA-Z0-9\s]+Listening...\s+Received
+          and acked:\s+520\s+Listening...\s+Received and acked:\s+521\s+File outfiles/Test11-file2.txt
+          completed.\s+Received 521 packets.
+        comparison-method: regex
+        timeout: 1
+        max-score: 1
+    - name: SWTest12 Server output
+      id: swtest12-server-output
+      uses: classroom-resources/autograding-io-grader@v1
+      with:
+        test-name: SWTest12 Server output
+        setup-command: ''
+        command: head -n 8 test12-server-output.txt && tail -n 5 test12-server-output.txt
+        input: ''
+        expected-output: Listening...\s+Received and acked:\s+1\s+Listening...\s+Received
+          and acked:\s+2\s+Listening...\s+Received and acked:\s+3[\.:a-zA-Z0-9\s]+Listening...\s+Received
+          and acked:\s+512\s+Listening...\s+Received and acked:\s+513\s+File outfiles/Test12-file2.txt
+          completed.\s+Received 513 packets.
+        comparison-method: regex
+        timeout: 1
+        max-score: 1
+    - name: SWTest5 Client output
+      id: swtest5-client-output
+      uses: classroom-resources/autograding-io-grader@v1
+      with:
+        test-name: SWTest5 Client output
+        setup-command: ''
+        command: head -n 5 test5-client-output.txt && tail -n 5 test5-client-output.txt
+        input: ''
+        expected-output: Sent packet\s+1\s+Received ACK on 1\s+Sent packet\s+2\s+Received
+          ACK on 2[a-zA-Z0-9\s]+Sent packet\s+299\s+Received ACK on 299\s+Sent final
+          packet\s+for file1.pdf.\s+Received ACK on 300
+        comparison-method: regex
+        timeout: 1
+        max-score: 1
+    - name: SWTest6 Client output
+      id: swtest6-client-output
+      uses: classroom-resources/autograding-io-grader@v1
+      with:
+        test-name: SWTest6 Client output
+        setup-command: ''
+        command: head -n 10 test6-client-output.txt && tail -n 10 test6-client-output.txt
+        input: ''
+        expected-output: Sent packet\s+1\s+Received ACK on 1\s+Sent packet\s+2\s+Received
+          ACK on 2[a-zA-Z0-9\s]+Sent packet\s+200\s+Received ACK on 200\s+Sent final
+          packet\s+for file1.pdf.\s+Received ACK on 201
+        comparison-method: regex
+        timeout: 1
+        max-score: 1
+    - name: SWTest7 Client output
+      id: swtest7-client-output
+      uses: classroom-resources/autograding-io-grader@v1
+      with:
+        test-name: SWTest7 Client output
+        setup-command: ''
+        command: head -n 10 test7-client-output.txt && tail -n 10 test7-client-output.txt
+        input: ''
+        expected-output: Sent packet\s+1\s+Received ACK on 1\s+Sent packet\s+2\s+Received
+          ACK on 2[a-zA-Z0-9\s]+Sent packet\s+6899\s+Received ACK on 6899\s+Sent final
+          packet\s+for file2.txt.\s+Received ACK on 6900
+        comparison-method: regex
+        timeout: 1
+        max-score: 1
+    - name: SWTest8 Client output
+      id: swtest8-client-output
+      uses: classroom-resources/autograding-io-grader@v1
+      with:
+        test-name: SWTest8 Client output
+        setup-command: ''
+        command: head -n 10 test8-client-output.txt && tail -n 10 test8-client-output.txt
+        input: ''
+        expected-output: Sent packet\s+1\s+Received ACK on 1\s+Sent packet\s+2\s+Received
+          ACK on 2[a-zA-Z0-9\s]+Sent packet\s+5217\s+Received ACK on 5217\s+Sent final
+          packet\s+for file2.txt.\s+Received ACK on 5218
+        comparison-method: regex
+        timeout: 1
+        max-score: 1
+    - name: SWTest9 Client output
+      id: swtest9-client-output
+      uses: classroom-resources/autograding-io-grader@v1
+      with:
+        test-name: SWTest9 Client output
+        setup-command: ''
+        command: head -n 10 test9-client-output.txt && tail -n 10 test9-client-output.txt
+        input: ''
+        expected-output: Sent packet\s+1\s+Received ACK on 1\s+Sent packet\s+2\s+Received
+          ACK on 2[a-zA-Z0-9\s]+Sent packet\s+2979\s+Received ACK on 2979\s+Sent final
+          packet\s+for file2.txt.\s+Received ACK on 2980
+        comparison-method: regex
+        timeout: 1
+        max-score: 1
+    - name: SWTest10 Client output
+      id: swtest10-client-output
+      uses: classroom-resources/autograding-io-grader@v1
+      with:
+        test-name: SWTest10 Client output
+        setup-command: ''
+        command: head -n 10 test10-client-output.txt && tail -n 10 test10-client-output.txt
+        input: ''
+        expected-output: Sent packet\s+1\s+Received ACK on 1\s+Sent packet\s+2\s+Received
+          ACK on 2[a-zA-Z0-9\s]+Sent packet\s+586\s+Received ACK on 586\s+Sent final
+          packet\s+for file2.txt.\s+Received ACK on 587
+        comparison-method: regex
+        timeout: 1
+        max-score: 1
+    - name: SWTest11 Client output
+      id: swtest11-client-output
+      uses: classroom-resources/autograding-io-grader@v1
+      with:
+        test-name: SWTest11 Client output
+        setup-command: ''
+        command: head -n 10 test11-client-output.txt && tail -n 10 test11-client-output.txt
+        input: ''
+        expected-output: Sent packet\s+1\s+Received ACK on 1\s+Sent packet\s+2\s+Received
+          ACK on 2[a-zA-Z0-9\s]+Sent packet\s+520\s+Received ACK on 520\s+Sent final
+          packet\s+for file2.txt.\s+Received ACK on 521
+        comparison-method: regex
+        timeout: 1
+        max-score: 1
+    - name: SWTest12 Client output
+      id: swtest12-client-output
+      uses: classroom-resources/autograding-io-grader@v1
+      with:
+        test-name: SWTest12 Client output
+        setup-command: ''
+        command: head -n 10 test12-client-output.txt && tail -n 10 test12-client-output.txt
+        input: ''
+        expected-output: Sent packet\s+1\s+Received ACK on 1\s+Sent packet\s+2\s+Received
+          ACK on 2[a-zA-Z0-9\s]+Sent packet\s+512\s+Received ACK on 512\s+Sent final
+          packet\s+for file2.txt.\s+Received ACK on 513
+        comparison-method: regex
+        timeout: 1
+        max-score: 1
+    - name: SW File contents
+      id: sw-file-contents
+      uses: classroom-resources/autograding-io-grader@v1
+      with:
+        test-name: SW File contents
+        setup-command: ''
+        command: cat outfiles/sha256sum-results
+        input: ''
+        expected-output: |-
+          outfiles/Test1-file1.pdf: OK
+          outfiles/Test10-file2.txt: OK
+          outfiles/Test11-file2.txt: OK
+          outfiles/Test12-file2.txt: OK
+          outfiles/Test2-file1.pdf: OK
+          outfiles/Test3-file1.pdf: OK
+          outfiles/Test4-file1.pdf: OK
+          outfiles/Test5-file1.pdf: OK
+          outfiles/Test6-file1.pdf: OK
+          outfiles/Test7-file2.txt: OK
+          outfiles/Test8-file2.txt: OK
+          outfiles/Test9-file2.txt: OK
+        comparison-method: exact
+        timeout: 1
+        max-score: 12
+    - name: Client fail commands
+      id: client-fail-commands
+      uses: classroom-resources/autograding-io-grader@v1
+      with:
+        test-name: Client fail commands
+        setup-command: chmod 700 client-fail-commands && ./client-fail-commands
+        command: cat client-fail-results
+        input: ''
+        expected-output: |-
+          Error: port must be between 1025 and 65535
+          Syntax: UdpStopWaitClient-5784 -dest=ip -port=p -f=filename -packetsize=s
+          Error parsing destination address: 1.2.3.4.5: Name or service not known
+          Syntax: UdpStopWaitClient-5784 -dest=ip -port=p -f=filename -packetsize=s
+          Error parsing packet size: For input string: "5.6"
+          Syntax: UdpStopWaitClient-5784 -dest=ip -port=p -f=filename -packetsize=s
+          Syntax: UdpStopWaitClient-5784 -dest=ip -port=p -f=filename -packetsize=s
+          Syntax: UdpStopWaitClient-5784 -dest=ip -port=p -f=filename -packetsize=s
+          Syntax: UdpStopWaitClient-5784 -dest=ip -port=p -f=filename -packetsize=s
+          Syntax: UdpStopWaitClient-5784 -dest=ip -port=p -f=filename -packetsize=s
+        comparison-method: exact
+        timeout: 1
+        max-score: 4
+    - name: Server fail commands
+      id: server-fail-commands
+      uses: classroom-resources/autograding-io-grader@v1
+      with:
+        test-name: Server fail commands
+        setup-command: chmod 700 server-fail-commands && ./server-fail-commands
+        command: cat server-fail-results
+        input: ''
+        expected-output: |-
+          Error: port must be between 1025 and 65535
+          Syntax: UdpStopWaitServer-5784 -ip=ip -port=p -outfile=f
+          Error: port must be between 1025 and 65535
+          Syntax: UdpStopWaitServer-5784 -ip=ip -port=p -outfile=f
+          Error parsing listening address: 1.2.3.4.5: Name or service not known
+          Syntax: UdpStopWaitServer-5784 -ip=ip -port=p -outfile=f
+          Error parsing port: For input string: "5.6"
+          Syntax: UdpStopWaitServer-5784 -ip=ip -port=p -outfile=f
+          Syntax: UdpStopWaitServer-5784 -ip=ip -port=p -outfile=f
+          Syntax: UdpStopWaitServer-5784 -ip=ip -port=p -outfile=f
+          Syntax: UdpStopWaitServer-5784 -ip=ip -port=p -outfile=f
+        comparison-method: exact
+        timeout: 1
+        max-score: 5
+    - name: Generate Javadoc
+      id: generate-javadoc
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: Generate Javadoc
+        setup-command: ''
+        command: gradle javadoc
+        timeout: 10
+        max-score: 0
+    - name: Autograding Reporter
+      uses: classroom-resources/autograding-grading-reporter@v1
+      env:
+        BUILD-JARS_RESULTS: "${{steps.build-jars.outputs.result}}"
+        COPYING-SENDING-WITH-ACKS-CALCULATOR_RESULTS: "${{steps.copying-sending-with-acks-calculator.outputs.result}}"
+        SENDING-WITH-CALCULATOR-TESTS_RESULTS: "${{steps.sending-with-calculator-tests.outputs.result}}"
+        SENDING-WITH-ACKS-TEST-1_RESULTS: "${{steps.sending-with-acks-test-1.outputs.result}}"
+        SENDING-WITH-ACKS-TEST-2_RESULTS: "${{steps.sending-with-acks-test-2.outputs.result}}"
+        SENDING-WITH-ACKS-TEST-3_RESULTS: "${{steps.sending-with-acks-test-3.outputs.result}}"
+        SENDING-WITH-ACKS-TEST-4_RESULTS: "${{steps.sending-with-acks-test-4.outputs.result}}"
+        SENDING-WITH-ACKS-TEST-5_RESULTS: "${{steps.sending-with-acks-test-5.outputs.result}}"
+        SENDING-WITH-ACKS-TEST-6_RESULTS: "${{steps.sending-with-acks-test-6.outputs.result}}"
+        SENDING-WITH-ACKS-TEST-7_RESULTS: "${{steps.sending-with-acks-test-7.outputs.result}}"
+        SENDING-WITH-ACKS-TEST-8_RESULTS: "${{steps.sending-with-acks-test-8.outputs.result}}"
+        SENDING-WITH-ACKS-TEST-9_RESULTS: "${{steps.sending-with-acks-test-9.outputs.result}}"
+        SENDING-WITH-ACKS-TEST-10_RESULTS: "${{steps.sending-with-acks-test-10.outputs.result}}"
+        SENDING-WITH-ACKS-TEST-11_RESULTS: "${{steps.sending-with-acks-test-11.outputs.result}}"
+        SENDING-WITH-ACKS-TEST-12_RESULTS: "${{steps.sending-with-acks-test-12.outputs.result}}"
+        SENDING-WITH-ACKS-TEST-13_RESULTS: "${{steps.sending-with-acks-test-13.outputs.result}}"
+        SENDING-WITH-ACKS-TEST-14_RESULTS: "${{steps.sending-with-acks-test-14.outputs.result}}"
+        SENDING-WITH-ACKS-MISSING-PARAMETER-TEST-1_RESULTS: "${{steps.sending-with-acks-missing-parameter-test-1.outputs.result}}"
+        SENDING-WITH-ACKS-MISSING-PARAMETER-TEST-2_RESULTS: "${{steps.sending-with-acks-missing-parameter-test-2.outputs.result}}"
+        COPYING-STOP-WAIT-CLIENT-AND-SERVER_RESULTS: "${{steps.copying-stop-wait-client-and-server.outputs.result}}"
+        PREPARE-OUTPUT-DIRECTORY_RESULTS: "${{steps.prepare-output-directory.outputs.result}}"
+        RUN-STOP-WAIT-TESTS_RESULTS: "${{steps.run-stop-wait-tests.outputs.result}}"
+        SWTEST1-SERVER-OUTPUT_RESULTS: "${{steps.swtest1-server-output.outputs.result}}"
+        SWTEST1-SERVER-OUTPUT-CONCLUSION_RESULTS: "${{steps.swtest1-server-output-conclusion.outputs.result}}"
+        SWTEST1-CLIENT-OUTPUT_RESULTS: "${{steps.swtest1-client-output.outputs.result}}"
+        SWTEST2-SERVER-OUTPUT_RESULTS: "${{steps.swtest2-server-output.outputs.result}}"
+        SWTEST2-CLIENT-OUTPUT_RESULTS: "${{steps.swtest2-client-output.outputs.result}}"
+        SWTEST2-CLIENT-OUTPUT-CONCLUSION_RESULTS: "${{steps.swtest2-client-output-conclusion.outputs.result}}"
+        SWTEST3-SERVER-OUTPUT_RESULTS: "${{steps.swtest3-server-output.outputs.result}}"
+        SWTEST3-SERVER-OUTPUT-CONCLUSION_RESULTS: "${{steps.swtest3-server-output-conclusion.outputs.result}}"
+        SWTEST3-CLIENT-OUTPUT_RESULTS: "${{steps.swtest3-client-output.outputs.result}}"
+        SWTEST4-SERVER-OUTPUT_RESULTS: "${{steps.swtest4-server-output.outputs.result}}"
+        SWTEST4-CLIENT-OUTPUT_RESULTS: "${{steps.swtest4-client-output.outputs.result}}"
+        SWTEST5-SERVER-OUTPUT_RESULTS: "${{steps.swtest5-server-output.outputs.result}}"
+        SWTEST6-SERVER-OUTPUT_RESULTS: "${{steps.swtest6-server-output.outputs.result}}"
+        SWTEST7-SERVER-OUTPUT_RESULTS: "${{steps.swtest7-server-output.outputs.result}}"
+        SWTEST8-SERVER-OUTPUT_RESULTS: "${{steps.swtest8-server-output.outputs.result}}"
+        SWTEST9-SERVER-OUTPUT_RESULTS: "${{steps.swtest9-server-output.outputs.result}}"
+        SWTEST10-SERVER-OUTPUT_RESULTS: "${{steps.swtest10-server-output.outputs.result}}"
+        SWTEST11-SERVER-OUTPUT_RESULTS: "${{steps.swtest11-server-output.outputs.result}}"
+        SWTEST12-SERVER-OUTPUT_RESULTS: "${{steps.swtest12-server-output.outputs.result}}"
+        SWTEST5-CLIENT-OUTPUT_RESULTS: "${{steps.swtest5-client-output.outputs.result}}"
+        SWTEST6-CLIENT-OUTPUT_RESULTS: "${{steps.swtest6-client-output.outputs.result}}"
+        SWTEST7-CLIENT-OUTPUT_RESULTS: "${{steps.swtest7-client-output.outputs.result}}"
+        SWTEST8-CLIENT-OUTPUT_RESULTS: "${{steps.swtest8-client-output.outputs.result}}"
+        SWTEST9-CLIENT-OUTPUT_RESULTS: "${{steps.swtest9-client-output.outputs.result}}"
+        SWTEST10-CLIENT-OUTPUT_RESULTS: "${{steps.swtest10-client-output.outputs.result}}"
+        SWTEST11-CLIENT-OUTPUT_RESULTS: "${{steps.swtest11-client-output.outputs.result}}"
+        SWTEST12-CLIENT-OUTPUT_RESULTS: "${{steps.swtest12-client-output.outputs.result}}"
+        SW-FILE-CONTENTS_RESULTS: "${{steps.sw-file-contents.outputs.result}}"
+        CLIENT-FAIL-COMMANDS_RESULTS: "${{steps.client-fail-commands.outputs.result}}"
+        SERVER-FAIL-COMMANDS_RESULTS: "${{steps.server-fail-commands.outputs.result}}"
+        GENERATE-JAVADOC_RESULTS: "${{steps.generate-javadoc.outputs.result}}"
+      with:
+        runners: build-jars,copying-sending-with-acks-calculator,sending-with-calculator-tests,sending-with-acks-test-1,sending-with-acks-test-2,sending-with-acks-test-3,sending-with-acks-test-4,sending-with-acks-test-5,sending-with-acks-test-6,sending-with-acks-test-7,sending-with-acks-test-8,sending-with-acks-test-9,sending-with-acks-test-10,sending-with-acks-test-11,sending-with-acks-test-12,sending-with-acks-test-13,sending-with-acks-test-14,sending-with-acks-missing-parameter-test-1,sending-with-acks-missing-parameter-test-2,copying-stop-wait-client-and-server,prepare-output-directory,run-stop-wait-tests,swtest1-server-output,swtest1-server-output-conclusion,swtest1-client-output,swtest2-server-output,swtest2-client-output,swtest2-client-output-conclusion,swtest3-server-output,swtest3-server-output-conclusion,swtest3-client-output,swtest4-server-output,swtest4-client-output,swtest5-server-output,swtest6-server-output,swtest7-server-output,swtest8-server-output,swtest9-server-output,swtest10-server-output,swtest11-server-output,swtest12-server-output,swtest5-client-output,swtest6-client-output,swtest7-client-output,swtest8-client-output,swtest9-client-output,swtest10-client-output,swtest11-client-output,swtest12-client-output,sw-file-contents,client-fail-commands,server-fail-commands,generate-javadoc

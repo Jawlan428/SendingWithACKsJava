@@ -1,0 +1,60 @@
+Assignment 2
+Section 3 Questions
+Introduction to Computer Networks
+Semester 1 5784
+
+Student Names
+
+----------------------------------------------
+Experiment 1: Small packets
+
+Packet size: 100B
+Measured ACK size: [Fill me in]
+Measured RTT: [Fill me in]
+
+Measured actual sending time: [Fill me in]
+Calculated theoretical sending time: [Fill me in]
+
+Q1: Are the actual and calculated sending times close or identical?
+
+[Fill me in]
+
+Q2: If they are not identical or close, explain why they differ.
+
+[Fill me in]
+
+----------------------------------------------
+Experiment 2: Medium packets
+
+Packet size: 1KB
+Measured ACK size: [Fill me in]
+Measured RTT: [Fill me in]
+
+Measured actual sending time: [Fill me in]
+Calculated theoretical sending time: [Fill me in]
+
+Q1: Are the actual and calculated sending times close or identical?
+
+[Fill me in]
+
+Q2: If they are not identical or close, explain why they differ.
+
+[Fill me in]
+
+----------------------------------------------
+Experiment 3: Giant packets
+
+Packet size: 10KB
+Measured ACK size: [Fill me in]
+Measured RTT: [Fill me in]
+
+Measured actual sending time: [Fill me in]
+Calculated theoretical sending time: [Fill me in]
+
+Q1: Are the actual and calculated sending times close or identical?
+
+[Fill me in]
+
+Q2: If they are not identical or close, explain why they differ.
+
+[Fill me in]
